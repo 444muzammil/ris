@@ -18,7 +18,7 @@ def get_cached_model():
         # 2. Build the path to the model folder. 
         # If 'local_minilm_model' is in the root (next to 'rank.py'), 
         # use '..' to go up one level from 'src'
-        model_path = os.path.join(script_dir, '..', 'local_minilm_model')
+        model_path = os.path.join(script_dir, 'local_minilm_model')
         
         # 3. Load the model using the absolute path and force local-only mode
         _AI_MODEL_CACHE = SentenceTransformer(model_path, local_files_only=True)
