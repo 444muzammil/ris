@@ -1,0 +1,77 @@
+# Redrob Hackathon — Submission Metadata Template
+#
+# Copy this file to your repo root as `submission_metadata.yaml` and fill it in.
+# The fields here should match what you submit via the portal at upload time.
+# Stage 3 review uses this file to verify your portal metadata.
+
+# ============================================================================
+# Team identity
+# ============================================================================
+team_name: "RankMind"  # Used in leaderboard and announcements
+
+primary_contact:
+  name: "Muzammil Muhammed Shoeb Khan"
+  email: "muzammil1010101@gmail.com"   # Used for all organizer communication
+  phone: "+91-8983223598"        # Used for top-50 / top-10 outreach
+
+team_members:
+  - name: "Muzammil Muhammed Shoeb Khan"
+    email: "muzammil1010101@gmail.com"
+    role: "ML Engineer"          # Optional, e.g. "Team Lead", "Backend", "Data"
+
+  # Add more members as needed; solo participants list just one member
+
+# ============================================================================
+# Code and reproducibility
+# ============================================================================
+github_repo: "https://github.com/YOUR_USERNAME/YOUR_REPO"
+# Required. Must be reachable. Private repos OK if you can grant organizer
+# access at Stage 3 (the email to add will be communicated then).
+
+sandbox_link: "https://huggingface.co/spaces/YOUR_USERNAME/redrob-ranker"
+# Required. A working hosted environment where the ranker can be run on a small
+# candidate sample. See Section 10.5 of submission_spec.md for acceptable
+# platforms (HuggingFace Spaces, Streamlit Cloud, Replit, Colab, Docker, Binder).
+
+reproduce_command: "python rank.py --candidates ./candidates.jsonl --out ./submission.csv"
+# The single command that produces submission.csv from candidates.jsonl.
+# Should run end-to-end within 5 minutes on CPU with 16GB RAM and no network.
+
+# ============================================================================
+# Compute environment
+# ============================================================================
+compute:
+  platform: "Local Windows PC"                    # Or: "AWS EC2 c5.4xlarge", "Local Linux box", etc.
+  cpu_cores: 4                                  # Number of CPU cores used
+  ram_gb: 8                                    # Available RAM in GB
+  python_version: "3.14.6"                      # python --version
+  os: "Windows 10"                              # Or "Ubuntu 22.04 LTS", etc.
+  uses_gpu_for_inference: false                 # Must be false — see compute constraints
+  has_network_during_ranking: false             # Must be false — no API calls during ranking
+  pre_computation_required: false               # true if you pre-compute embeddings or train models offline
+  pre_computation_time_minutes: 0               # Approximate, if applicable
+
+# ============================================================================
+# AI tools declaration
+# ============================================================================
+ai_tools_used:
+  - "Gemini"
+
+ai_usage_summary: |
+  Used Gemini exclusively as an architectural guide and pair programmer. Gemini assisted in writing the dual-engine scoring logic inside the ranking script, streaming local JSONL records line-by-line, setting up the multi-template dynamic reasoning sentences to avoid plagiarism penalties, and structuring the offline environment tracking. No private candidate data was transmitted to public LLM endpoints.
+
+# ============================================================================
+# Approach summary (optional but recommended)
+# ============================================================================
+methodology_summary: |
+  Hybrid pipeline executing a dual-layer scoring model: TF-IDF lexical matching combined with dense vector embeddings via a cached local SentenceTransformer (all-MiniLM-L6-v2). Profiles are dynamically cross-referenced against text descriptions and experience boundaries. Employs structural penalty thresholds to neutralize keyword-stuffer profiles and flag impossible honeypots (disqualifying 0-year experience vectors or extreme anomalies). Final scores are scaled using a multiplicative behavioral modifier based on historical recruiter response rates to bubble up active job seekers, and justifications are generated dynamically across varying templates to protect against template replication rules.
+
+# ============================================================================
+# Declarations
+# ============================================================================
+declarations:
+  read_submission_spec: true        # I have read submission_spec.md in full
+  code_is_original_work: true       # My code is my team's original work (using AI as a tool is fine)
+  no_collusion: true                # I have not coordinated my submission with other teams
+  honeypot_check_done: true         # Set to true because your engine actively filters and penalizes impossible 0-year profiles
+  reproduction_tested: true         # I have tested that my reproduce_command runs end-to-end

@@ -1,0 +1,16 @@
+# Large Data & Model files (Must not be uploaded to GitHub)
+data/
+local_minilm_model/
+*.jsonl
+*.gz
+
+# Output files
+*.csv
+RankMind.csv
+
+# Python environment & cache junk
+__pycache__/
+*.pyc
+venv/
+.env
+.vscode/
