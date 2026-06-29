@@ -3,6 +3,15 @@ import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 from sentence_transformers import SentenceTransformer
+# Get the directory where this script is located
+base_path = os.path.dirname(os.path.abspath(__file__))
+
+# Create the absolute path to your model folder
+# Assuming your model is in the same folder as your scripts
+model_path = os.path.join(base_path, 'local_minilm_model')
+
+# Load the model using the absolute path
+model = SentenceTransformer(model_path)
 # --- GLOBAL MODEL CACHE ---
 _AI_MODEL_CACHE = None
 
