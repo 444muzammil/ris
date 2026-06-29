@@ -1,29 +1,19 @@
-import os
 import pandas as pd
 import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 from sentence_transformers import SentenceTransformer
-
 # --- GLOBAL MODEL CACHE ---
 _AI_MODEL_CACHE = None
 
 def get_cached_model():
-  """Ensures the heavy AI model is loaded into memory exactly ONCE and from a local, offline path."""
+    """Ensures the heavy AI model is loaded into memory exactly ONCE and from a local, offline path."""
     global _AI_MODEL_CACHE
     if _AI_MODEL_CACHE is None:
-        # 1. Get the directory where this script (ranking_engine.py) is located
-        script_dir = os.path.dirname(os.path.abspath(__file__))
-        
-        # 2. Build the path to the model folder. 
-        # If 'local_minilm_model' is in the root (next to 'rank.py'), 
-        # use '..' to go up one level from 'src'
-        model_path = os.path.join(script_dir, 'local_minilm_model')
-        
-        # 3. Load the model using the absolute path and force local-only mode
-        _AI_MODEL_CACHE = SentenceTransformer(model_path, local_files_only=True)
-        
+        # POINT TO THE LOCAL FOLDER INSTEAD OF THE INTERNET
+        _AI_MODEL_CACHE = SentenceTransformer('./local_minilm_model') 
     return _AI_MODEL_CACHE
+
 # --- MATPLOTLIB BYPASS: BLIND HOOK FOR ENVIRONMENT STYLING ---
 class VisualSafeDataFrame(pd.DataFrame):
     @property
