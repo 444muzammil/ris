@@ -178,7 +178,7 @@ class RankingEngine:
         final_scores = (final_scores / final_scores.max()) * 0.9920
 
         # Package for Explanation Engine
-        final_top_df['score'] = np.round(final_scores(final_scores, 4)
+        final_top_df['score'] = np.round(final_scores, 4)
         final_top_df['_clean_title'] = titles.loc[top_2000_idx]
         final_top_df['_clean_exp'] = exp_top
         final_top_df['_clean_resp_rate'] = resp_rates_top
