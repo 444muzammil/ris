@@ -1,114 +1,389 @@
-RankMind — Recruiter Intelligence System
-Download Python | Python.org The MIT License – Open Source Initiative
+# 🚀 RankMind — Recruiter Intelligence System
 
-An advanced hybrid AI-powered candidate discovery pipeline built for the Redrob Hackathon Challenge. RankMind intelligently ranks candidate profiles against a job description using a three-phase pipeline that combines lexical/dense retrieval, constraint-based reasoning, and explainable AI.
+> **An advanced hybrid AI-powered candidate discovery pipeline built for the Redrob Hackathon Challenge.**
 
-[Image blocked: Pipeline Overview]
+RankMind intelligently ranks candidate profiles against a job description using a **three-phase AI pipeline** that combines **hybrid retrieval, constraint-based reasoning, and explainable AI** to produce recruiter-friendly candidate rankings.
 
-Table of Contents
-Overview
-Features
-Installation
-Usage
-Pipeline Architecture
-Data
-Results
-Reproducibility & Environment
-License
-Acknowledgments
-Contact
-Overview
-RankMind addresses the challenge of efficiently identifying top talent from large candidate pools. By integrating state-of-the-art NLP techniques with rule-based reasoning, the system delivers transparent, explainable rankings that align with both semantic similarity and hard constraints (experience, title, tech stack).
+---
 
-Features
-Hybrid Retrieval (Phase 1): Combines TF-IDF (scikit-learn) and dense embeddings (Sentence-BERT all-MiniLM-L6-v2) for robust semantic and lexical matching.
-Constraint Reasoning (Phase 2): Enforces hard filters and soft preferences on experience years, job titles, and core technologies.
-Explainable AI (Phase 3): Generates human-readable justifications for each candidate’s score, enhancing recruiter trust.
-Offline-First: No external API calls; all computation runs locally on CPU.
-Reproducible: All scoring weights and logic are encapsulated in src/ranking_engine.py.
-Ready for Submission: Outputs a ranked CSV (submission.csv) that matches the expected hackathon format.
-Installation
-Clone the repository
+## 📑 Table of Contents
 
-Code
-· bash
+- [Overview](#-overview)
+- [Features](#-features)
+- [Installation](#-installation)
+- [Usage](#-usage)
+- [Pipeline Architecture](#-pipeline-architecture)
+- [Project Structure](#-project-structure)
+- [Data](#-data)
+- [Output](#-output)
+- [Results](#-results)
+- [Reproducibility](#-reproducibility)
+- [Acknowledgments](#-acknowledgments)
+- [Contact](#-contact)
+
+---
+
+# 📖 Overview
+
+Recruiters often need to identify the best candidates from hundreds or thousands of resumes.
+
+**RankMind** addresses this challenge using a multi-stage ranking pipeline that combines:
+
+- 🔍 Hybrid semantic + lexical retrieval
+- 📋 Constraint-based candidate filtering
+- 🧠 Explainable AI scoring
+
+Unlike simple keyword matching systems, RankMind balances **semantic similarity**, **hard hiring requirements**, and **human-readable explanations**, making the ranking process transparent and recruiter-friendly.
+
+---
+
+# ✨ Features
+
+### 🔍 Phase 1 — Hybrid Retrieval
+
+Combines:
+
+- TF-IDF (scikit-learn)
+- Sentence-BERT (`all-MiniLM-L6-v2`)
+
+to capture both:
+
+- Exact keyword matches
+- Deep semantic similarity
+
+---
+
+### 📋 Phase 2 — Constraint Reasoning
+
+Applies hiring logic including:
+
+- ✅ Minimum years of experience
+- ✅ Job title relevance
+- ✅ Required technologies
+- ✅ Soft preference scoring
+
+---
+
+### 🧠 Phase 3 — Explainable AI
+
+Every candidate receives an explanation describing:
+
+- Why they ranked highly
+- Skills that matched
+- Experience bonuses
+- Missing requirements (if any)
+
+This improves recruiter trust and decision making.
+
+---
+
+### 💻 Offline First
+
+- No external APIs
+- CPU-only execution
+- Fully local inference
+
+---
+
+### 🔄 Reproducible
+
+All weights, thresholds, and scoring logic are centralized inside:
+
+```
+src/ranking_engine.py
+```
+
+---
+
+### 🏆 Hackathon Ready
+
+Generates a submission file compatible with the Redrob Hackathon format:
+
+```
+submission.csv
+```
+
+---
+
+# ⚙️ Installation
+
+## 1. Clone the repository
+
+```bash
 git clone https://github.com/444muzammil/ris.git
 cd ris
-Set up a Python environment (>=3.11)
+```
 
-Code
-· bash
+---
+
+## 2. Create a virtual environment
+
+```bash
 python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-Install dependencies
+```
 
-Code
-· bash
+### Linux / macOS
+
+```bash
+source venv/bin/activate
+```
+
+### Windows
+
+```bash
+venv\Scripts\activate
+```
+
+---
+
+## 3. Install dependencies
+
+```bash
 pip install -r requirements.txt
-The requirements.txt includes:
+```
 
-scikit-learn
-sentence-transformers
-pandas
-numpy
-pyyaml
-python-docx (for reading the Job Description)
-Usage
-Run the ranking pipeline from the command line:
+### Required packages
 
-Code
-· bash
-python rank.py --candidates ./data/candidates.jsonl --out ./submission.csv
-Arguments
-Argument	Description	Default
---candidates	Path to the candidate profiles (JSONL)	./data/candidates.jsonl
---out	Output CSV file path	./submission.csv
---job_desc	Path to the Job Description (DOCX)	./job_description.docx
---config	Path to scoring configuration (YAML)	./submission_metadata.yaml
-Note: The script will automatically load the default files if paths are not provided.
+- scikit-learn
+- sentence-transformers
+- pandas
+- numpy
+- pyyaml
+- python-docx
 
-Output
-The generated submission.csv contains:
+---
 
-candidate_id: Unique identifier from the input
-score: Final ranking score (higher = better)
-rank: Position in the sorted list (1 = top)
-explanation: Human-readable justification for the score
-Pipeline Architecture
-RankMind operates in three distinct phases:
+# 🚀 Usage
 
-Phase 1: Lexical/Dense Hybrid Retrieval
-TF-IDF Vectorizer (scikit-learn) captures exact keyword matches.
-Sentence-BERT (all-MiniLM-L6-v2) encodes semantic similarity.
-Hybrid score = weighted sum of normalized TF-IDF and cosine similarity.
-Phase 2: Constraint-Based Reasoning
-Hard Filters: Eliminate candidates failing mandatory criteria (e.g., minimum years of experience).
-Soft Scoring: Adjust scores based on title relevance and tech-stack match using fuzzy matching and predefined weights.
-Phase 3: Explanation Engine
-For each candidate, generates a dynamic explanation detailing:
-Which components contributed to the score.
-Any penalties or bonuses applied.
-How the candidate matches the job description.
-Data
-Candidate Profiles: data/candidates.jsonl Each line is a JSON object representing a candidate with fields like id, name, experience_years, titles, skills, etc.
-Job Description: job_description.docx Contains the target role description, which is parsed to extract keywords, required experience, desired titles, and tech stack.
-Configuration: submission_metadata.yaml Defines weights for each phase, constraint thresholds, and explanation templates.
-Results
-The pipeline outputs a ranked list saved as submission.csv. Top candidates exhibit high semantic alignment, satisfy hard constraints, and receive transparent justifications.
+Run the ranking pipeline:
 
-Reproducibility & Environment
-Compute: CPU-only; no GPU required.
-Determinism: All random seeds are fixed in src/ranking_engine.py (if any stochastic components are used).
-Version Control: Exact dependency versions are specified in requirements.txt.
-Offline Operation: No network calls during execution; all models are loaded locally.
-License
-This project is licensed under the MIT License - see the LICENSE [blocked] file for details.
+```bash
+python rank.py \
+    --candidates ./data/candidates.jsonl \
+    --out ./submission.csv
+```
 
-Acknowledgments
-Thanks to the Redrob Hackathon organizers for the challenge.
-The open-source community for scikit-learn, sentence-transformers, and PyYAML.
-Thanks to the contributors of the candidate dataset and job description.
-Contact
-For questions or feedback, please open an issue in this repository or contact the maintainers at 444muzammil (Muzammil) · GitHub.
+---
+
+## Available Arguments
+
+| Argument | Description | Default |
+|-----------|-------------|----------|
+| `--candidates` | Candidate JSONL file | `./data/candidates.jsonl` |
+| `--out` | Output CSV | `./submission.csv` |
+| `--job_desc` | Job Description DOCX | `./job_description.docx` |
+| `--config` | YAML configuration | `./submission_metadata.yaml` |
+
+> **Note:** If omitted, the default paths are automatically used.
+
+---
+
+# 🏗 Pipeline Architecture
+
+## Phase 1 — Hybrid Retrieval
+
+The first stage computes relevance using two independent retrieval methods.
+
+### TF-IDF
+
+Captures:
+
+- Exact keywords
+- Skill overlap
+- Technology names
+
+### Sentence-BERT
+
+Encodes resumes and job descriptions into dense embeddings using:
+
+```
+all-MiniLM-L6-v2
+```
+
+Similarity is computed using cosine distance.
+
+### Hybrid Score
+
+The final retrieval score is:
+
+```
+Hybrid Score =
+α × TF-IDF Score
++
+β × Dense Embedding Score
+```
+
+---
+
+## Phase 2 — Constraint-Based Reasoning
+
+Candidates are evaluated using hiring constraints.
+
+### Hard Constraints
+
+Examples include:
+
+- Minimum years of experience
+- Required technologies
+- Mandatory role eligibility
+
+Candidates failing mandatory requirements receive penalties or are filtered.
+
+### Soft Constraints
+
+Additional score adjustments are applied for:
+
+- Matching job titles
+- Relevant experience
+- Preferred technologies
+- Domain expertise
+
+---
+
+## Phase 3 — Explainability Engine
+
+Each ranked candidate includes a natural language explanation.
+
+Example:
+
+> Strong semantic similarity with the job description. Meets required experience. Demonstrates expertise in Python, Machine Learning, and NLP. Previous Software Engineer role closely matches target position.
+
+This enables recruiters to understand **why** each score was assigned.
+
+---
+
+# 📁 Project Structure
+
+```
+.
+├── data/
+│   └── candidates.jsonl
+│
+├── src/
+│   └── ranking_engine.py
+│
+├── job_description.docx
+├── submission_metadata.yaml
+├── rank.py
+├── requirements.txt
+└── README.md
+```
+
+---
+
+# 📂 Data
+
+## Candidate Profiles
+
+```
+data/candidates.jsonl
+```
+
+Each line contains a candidate record with fields such as:
+
+- Candidate ID
+- Name
+- Experience
+- Skills
+- Job Titles
+- Education
+
+---
+
+## Job Description
+
+```
+job_description.docx
+```
+
+The parser extracts:
+
+- Required experience
+- Technologies
+- Preferred skills
+- Job titles
+- Keywords
+
+---
+
+## Configuration
+
+```
+submission_metadata.yaml
+```
+
+Defines:
+
+- Scoring weights
+- Constraint thresholds
+- Explanation templates
+
+---
+
+# 📄 Output
+
+The generated file:
+
+```
+submission.csv
+```
+
+contains:
+
+| Column | Description |
+|----------|-------------|
+| `candidate_id` | Unique candidate identifier |
+| `score` | Final ranking score |
+| `rank` | Candidate position |
+| `explanation` | Explainable AI justification |
+
+---
+
+# 📊 Results
+
+The ranking pipeline prioritizes candidates who:
+
+- Possess strong semantic similarity
+- Meet mandatory hiring constraints
+- Match desired technologies
+- Have relevant job titles
+- Receive transparent explanations
+
+This produces recruiter-friendly rankings that balance **accuracy**, **fairness**, and **interpretability**.
+
+---
+
+# 🔬 Reproducibility
+
+- ✅ CPU-only execution
+- ✅ No internet dependency
+- ✅ Fixed random seeds
+- ✅ Fully deterministic pipeline
+- ✅ Exact dependency versions listed in `requirements.txt`
+
+---
+
+# 🙏 Acknowledgments
+
+Special thanks to:
+
+- **Redrob Hackathon** organizers
+- **scikit-learn**
+- **Sentence Transformers**
+- **PyYAML**
+- The contributors of the candidate dataset and job description
+
+---
+
+# 📬 Contact
+
+For questions, suggestions, or contributions:
+
+- **GitHub:** https://github.com/444muzammil
+- Open an issue in this repository.
+
+---
+
+## ⭐ If you found this project useful, consider giving it a star!
 
 Made with ❤️ for the Redrob Hackathon Challenge.
